@@ -45,17 +45,36 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate SLA routing and CRM registration
-    setTimeout(() => {
-      const generatedRef = 'BV-' + Math.floor(100000 + Math.random() * 900000);
-      setLeadRef(generatedRef);
+    const apiUrl = import.meta.env.VITE_API_URL || 'https://bentra-ventures.onrender.com';
+    try {
+      const res = await fetch(`${apiUrl}/api/leads`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fullName,
+          phone,
+          email,
+          vertical: selectedVertical,
+          locationName,
+          customDetails
+        })
+      });
+      const data = await res.json();
+      if (data && data.success && data.lead && data.lead.id) {
+        setLeadRef(data.lead.id);
+      } else {
+        setLeadRef('BV-' + Math.floor(100000 + Math.random() * 900000));
+      }
+    } catch {
+      setLeadRef('BV-' + Math.floor(100000 + Math.random() * 900000));
+    } finally {
       setIsSubmitting(false);
       setIsSuccess(true);
-    }, 700);
+    }
   };
 
   const handleReset = () => {

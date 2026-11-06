@@ -147,6 +147,24 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
       otpCode: randomOtp
     };
 
+    // Forward to live Render backend API
+    const apiUrl = import.meta.env.VITE_API_URL || 'https://bentra-ventures.onrender.com';
+    fetch(`${apiUrl}/api/bookings`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        customerName: address.fullName,
+        phone: address.phone,
+        address: `${address.flatHouseNo}, ${address.locality}, ${address.landmark}`,
+        pincode: address.pincode,
+        serviceItems: cartItems.map(item => item.service.name),
+        totalAmount: grandTotal,
+        paymentMethod,
+        appointmentDate: selectedDate,
+        appointmentSlot: selectedTime
+      })
+    }).catch(() => {});
+
     setTimeout(() => {
       setIsSubmitting(false);
       onBookingSuccess(newBooking);

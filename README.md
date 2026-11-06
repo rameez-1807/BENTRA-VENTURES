@@ -6,7 +6,8 @@
 **Headquartered in Bailey Road, Patna, Bihar, India**
 
 [![CI & Build Verification](https://github.com/rameez-1807/BENTRA-VENTURES/actions/workflows/ci.yml/badge.svg)](https://github.com/rameez-1807/BENTRA-VENTURES/actions/workflows/ci.yml)
-[![Live Production](https://img.shields.io/badge/Live_Website-bentra--ventures.vercel.app-00DC82?style=for-the-badge&logo=vercel&logoColor=white)](https://bentra-ventures.vercel.app)
+[![Live Frontend](https://img.shields.io/badge/Frontend-Vercel-00DC82?style=for-the-badge&logo=vercel&logoColor=white)](https://bentra-ventures.vercel.app)
+[![Live Backend](https://img.shields.io/badge/Backend-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://bentra-ventures.onrender.com/api/health)
 [![Vite](https://img.shields.io/badge/Vite-8.3-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-19.3-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -15,7 +16,8 @@
 
 <br/>
 
-### 🌐 **Live URL:** [https://bentra-ventures.vercel.app](https://bentra-ventures.vercel.app)
+### 🌐 **Live Production Frontend:** [https://bentra-ventures.vercel.app](https://bentra-ventures.vercel.app)
+### ⚡ **Live Production Backend:** [https://bentra-ventures.onrender.com](https://bentra-ventures.onrender.com/api/health)
 
 <br/>
 
