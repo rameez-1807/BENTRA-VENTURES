@@ -8,6 +8,7 @@
 [![CI & Build Verification](https://github.com/rameez-1807/BENTRA-VENTURES/actions/workflows/ci.yml/badge.svg)](https://github.com/rameez-1807/BENTRA-VENTURES/actions/workflows/ci.yml)
 [![Live Frontend](https://img.shields.io/badge/Frontend-Vercel-00DC82?style=for-the-badge&logo=vercel&logoColor=white)](https://bentra-ventures.vercel.app)
 [![Live Backend](https://img.shields.io/badge/Backend-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://bentra-ventures.onrender.com/api/health)
+[![Database](https://img.shields.io/badge/Database-Supabase_PostgreSQL-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
 [![Vite](https://img.shields.io/badge/Vite-8.3-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-19.3-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -18,6 +19,7 @@
 
 ### 🌐 **Live Production Frontend:** [https://bentra-ventures.vercel.app](https://bentra-ventures.vercel.app)
 ### ⚡ **Live Production Backend:** [https://bentra-ventures.onrender.com](https://bentra-ventures.onrender.com/api/health)
+### 🗄️ **Supabase Database Project:** `xcckrdfkkqreggehypuh` (PostgreSQL 17)
 
 <br/>
 
