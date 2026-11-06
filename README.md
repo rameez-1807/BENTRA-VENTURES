@@ -6,12 +6,18 @@
 **Headquartered in Bailey Road, Patna, Bihar, India**
 
 [![CI & Build Verification](https://github.com/rameez-1807/BENTRA-VENTURES/actions/workflows/ci.yml/badge.svg)](https://github.com/rameez-1807/BENTRA-VENTURES/actions/workflows/ci.yml)
+[![Live Production](https://img.shields.io/badge/Live_Website-bentra--ventures.vercel.app-00DC82?style=for-the-badge&logo=vercel&logoColor=white)](https://bentra-ventures.vercel.app)
 [![Vite](https://img.shields.io/badge/Vite-8.3-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-19.3-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4.3-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-F59E0B?style=for-the-badge)](LICENSE)
-[![Deploy with Vercel](https://img.shields.io/badge/Deploy-Vercel-black?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/new/clone?repository-url=https://github.com/rameez-1807/BENTRA-VENTURES)
+
+<br/>
+
+### 🌐 **Live URL:** [https://bentra-ventures.vercel.app](https://bentra-ventures.vercel.app)
+
+<br/>
 
 <br/>
 
