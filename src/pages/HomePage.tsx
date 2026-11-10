@@ -30,9 +30,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
 
   const verticalsOverview = [
     {
-      id: 'it-solutions',
+      id: 'it-digital',
       title: 'IT & Digital Solutions',
-      link: '/it-solutions',
+      link: '/it-digital',
       icon: Cpu,
       color: '#0284C7',
       tagline: 'Enterprise Software & Cloud Systems',
@@ -40,9 +40,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
       badge: 'Dedicated Tech Staffing'
     },
     {
-      id: 'fresh-fmcg',
+      id: 'fmcg-beverages',
       title: 'Fresh Supply & FMCG Logistics',
-      link: '/fresh-fmcg',
+      link: '/fmcg-beverages',
       icon: Fish,
       color: '#059669',
       tagline: 'Farm-to-Door Wholesale Supply Chain',
@@ -60,9 +60,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
       badge: 'From ₹1,900/sq.ft'
     },
     {
-      id: 'facility-services',
+      id: 'bentra-facility',
       title: 'Multi-Service & Facility Maintenance',
-      link: '/facility-services',
+      link: '/bentra-facility',
       icon: Wrench,
       color: '#0284C7',
       tagline: 'On-Demand Urban Care You Can Rely On',
@@ -143,20 +143,20 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
           <div className="flex gap-4 overflow-x-auto pb-2 no-scrollbar snap-x snap-mandatory">
             {[
               {
-                id: 'it-solutions',
+                id: 'it-digital',
                 title: 'IT & Digital Solutions',
                 image: '/img-it.jpg',
                 ctaText: 'Explore Service',
-                ctaLink: '/it-solutions',
+                ctaLink: '/it-digital',
                 accentColor: '#0284C7',
                 badge: null,
               },
               {
-                id: 'fresh-fmcg',
+                id: 'fmcg-beverages',
                 title: 'Fresh Supply & FMCG',
                 image: '/img-fmcg.jpg',
                 ctaText: 'View Pricing',
-                ctaLink: '/fresh-fmcg',
+                ctaLink: '/fmcg-beverages',
                 accentColor: '#059669',
                 badge: null,
               },
@@ -167,14 +167,14 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
                 ctaText: 'Get Estimates',
                 ctaLink: '/realty-infrastructure',
                 accentColor: '#B8860B',
-                badge: 'Turnkey Construction at ₹1,999/sq. ft.',
+                badge: 'Turnkey Construction at ₹1,900/sq. ft.',
               },
               {
-                id: 'facility-services',
+                id: 'bentra-facility',
                 title: 'Multi-Service & Facility Maintenance',
                 image: '/img-facility.jpg',
                 ctaText: 'Book Technician',
-                ctaLink: '/facility-services',
+                ctaLink: '/bentra-facility',
                 accentColor: '#0284C7',
                 badge: 'AC technicians & RO Systems',
               },
@@ -491,7 +491,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
               Frequently Asked Questions
             </h2>
             <p className="text-slate-600 text-sm">
-              Answers regarding our ₹1,999/sq.ft turnkey contracts, wholesale rates, IT SLAs, and Patna response times.
+              Answers regarding our ₹1,900/sq.ft turnkey contracts, wholesale rates, IT SLAs, and Patna response times.
             </p>
           </div>
 

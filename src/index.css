@@ -1,5 +1,36 @@
 @import "tailwindcss";
 
+@theme {
+  --color-ink-950: #050811;
+  --color-navy-950: #070e1c;
+  --color-navy-900: #0A192F;
+  --color-navy-800: #112240;
+  --color-navy-700: #1b345b;
+  --color-gold-400: #FBBF24;
+  --color-gold-500: #F59E0B;
+  --color-gold-600: #D97706;
+  --color-gold-700: #B45309;
+  --color-cyan-500: #06B6D4;
+  --color-cyan-600: #0891B2;
+  --font-heading: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --animate-spin-slow: spin 16s linear infinite;
+  --animate-pulse-subtle: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-fade-in: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @layer base {
   :root {
     --bg-main: #FFFFFF;
@@ -40,7 +71,7 @@
   background: #0E2442;
 }
 
-/* Glassmorphism Utilities - Premium White */
+/* Glassmorphism Utilities */
 .glass-panel-light {
   background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(16px);

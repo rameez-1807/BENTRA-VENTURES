@@ -1,114 +1,136 @@
-import React, { useState, useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import React, { Suspense, useEffect } from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { FloatingWidget } from './components/FloatingWidget';
+import { MobileBottomBar } from './components/nav/MobileBottomBar';
 import { QuoteModal } from './components/QuoteModal';
+import { QuoteProvider, useQuote } from './context/QuoteContext';
+import { ROUTE_ALIASES } from './routes';
 
-// Pages
-import { HomePage } from './pages/HomePage';
-import { ITSolutionsPage } from './pages/ITSolutionsPage';
-import { FreshFMCGPage } from './pages/FreshFMCGPage';
-import { RealtyPage } from './pages/RealtyPage';
-import { FacilityServicesPage } from './pages/FacilityServicesPage';
-import { ManpowerServicesPage } from './pages/ManpowerServicesPage';
-import { ROServicesPage } from './pages/ROServicesPage';
-import { WaterTankCleaningPage } from './pages/WaterTankCleaningPage';
-import { PestControlPage } from './pages/PestControlPage';
-import { DigitalMarketingPage } from './pages/DigitalMarketingPage';
-import { EventsHospitalityPage } from './pages/EventsHospitalityPage';
-import { VenturesPage } from './pages/VenturesPage';
-import { CorporateOverviewPage } from './pages/CorporateOverviewPage';
-import { PatnaHubPage } from './pages/PatnaHubPage';
-import { CareersPage } from './pages/CareersPage';
+// Code-split pages via React.lazy for TRD §6 performance budget
+const HomePage = React.lazy(() => import('./pages/HomePage').then(m => ({ default: m.HomePage })));
+const RealtyPage = React.lazy(() => import('./pages/RealtyPage').then(m => ({ default: m.RealtyPage })));
+const FacilityServicesPage = React.lazy(() => import('./pages/FacilityServicesPage').then(m => ({ default: m.FacilityServicesPage })));
+const ITSolutionsPage = React.lazy(() => import('./pages/ITSolutionsPage').then(m => ({ default: m.ITSolutionsPage })));
+const FreshFMCGPage = React.lazy(() => import('./pages/FreshFMCGPage').then(m => ({ default: m.FreshFMCGPage })));
+const EventsHospitalityPage = React.lazy(() => import('./pages/EventsHospitalityPage').then(m => ({ default: m.EventsHospitalityPage })));
+const ManpowerServicesPage = React.lazy(() => import('./pages/ManpowerServicesPage').then(m => ({ default: m.ManpowerServicesPage })));
+const VenturesPage = React.lazy(() => import('./pages/VenturesPage').then(m => ({ default: m.VenturesPage })));
+const CorporateOverviewPage = React.lazy(() => import('./pages/CorporateOverviewPage').then(m => ({ default: m.CorporateOverviewPage })));
+const PatnaHubPage = React.lazy(() => import('./pages/PatnaHubPage').then(m => ({ default: m.PatnaHubPage })));
+const CareersPage = React.lazy(() => import('./pages/CareersPage').then(m => ({ default: m.CareersPage })));
+const AdminPage = React.lazy(() => import('./pages/AdminPage').then(m => ({ default: m.AdminPage })));
+const NotFoundPage = React.lazy(() => import('./pages/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
 
-export const App: React.FC = () => {
-  const [quoteModalOpen, setQuoteModalOpen] = useState(false);
-  const [selectedVertical, setSelectedVertical] = useState<string>('realty-infrastructure');
-  const location = useLocation();
+// Sub-services (standalone vertical deep-dives)
+const ROServicesPage = React.lazy(() => import('./pages/ROServicesPage').then(m => ({ default: m.ROServicesPage })));
+const WaterTankCleaningPage = React.lazy(() => import('./pages/WaterTankCleaningPage').then(m => ({ default: m.WaterTankCleaningPage })));
+const PestControlPage = React.lazy(() => import('./pages/PestControlPage').then(m => ({ default: m.PestControlPage })));
+const DigitalMarketingPage = React.lazy(() => import('./pages/DigitalMarketingPage').then(m => ({ default: m.DigitalMarketingPage })));
 
-  // Scroll to top on route change or hash anchor
+// Accessible Loading Fallback for Suspense
+const PageLoader: React.FC = () => (
+  <div className="min-h-[60vh] flex flex-col items-center justify-center bg-slate-900/5 py-24" aria-busy="true" aria-live="polite">
+    <div className="w-12 h-12 rounded-full border-4 border-slate-300 border-t-amber-500 animate-spin mb-4" />
+    <span className="text-sm font-medium text-slate-600 tracking-wide uppercase">
+      Loading Brentra Ecosystem...
+    </span>
+  </div>
+);
+
+// Scroll to top or hash anchor on route transition
+const ScrollToTop: React.FC = () => {
+  const { pathname, hash } = useLocation();
+
   useEffect(() => {
-    if (!location.hash) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (!hash) {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
     } else {
-      const el = document.getElementById(location.hash.replace('#', ''));
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
+      const element = document.getElementById(hash.replace('#', ''));
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
       }
     }
-  }, [location.pathname, location.hash]);
+  }, [pathname, hash]);
 
-  const handleOpenQuoteModal = (vertical?: string) => {
-    if (vertical) {
-      setSelectedVertical(vertical);
-    }
-    setQuoteModalOpen(true);
-  };
+  return null;
+};
+
+// Main App Container with Context
+const AppContent: React.FC = () => {
+  const { isOpen, selectedVertical, openQuoteModal, closeQuoteModal } = useQuote();
 
   return (
     <div className="flex flex-col min-h-screen bg-white text-slate-800 antialiased selection:bg-[#0A192F] selection:text-white">
-      {/* Global Header */}
-      <Header onOpenQuoteModal={handleOpenQuoteModal} />
+      <ScrollToTop />
 
-      {/* Main Content Router */}
+      {/* Global Brand Header with Collapsible Strip & MegaMenu */}
+      <Header onOpenQuoteModal={openQuoteModal} />
+
+      {/* Primary Suspense Router */}
       <main className="flex-grow">
-        <Routes>
-          <Route path="/" element={<HomePage onOpenQuoteModal={handleOpenQuoteModal} />} />
-          
-          {/* 7 Dedicated Core Service Vertical Pages */}
-          <Route path="/realty-infrastructure" element={<RealtyPage onOpenQuoteModal={handleOpenQuoteModal} />} />
-          <Route path="/construction-services" element={<RealtyPage onOpenQuoteModal={handleOpenQuoteModal} />} />
-          
-          <Route path="/it-solutions" element={<ITSolutionsPage onOpenQuoteModal={handleOpenQuoteModal} />} />
-          <Route path="/it-services" element={<ITSolutionsPage onOpenQuoteModal={handleOpenQuoteModal} />} />
-          
-          <Route path="/manpower-housekeeping" element={<ManpowerServicesPage onOpenQuoteModal={handleOpenQuoteModal} />} />
-          <Route path="/manpower-services" element={<ManpowerServicesPage onOpenQuoteModal={handleOpenQuoteModal} />} />
-          
-          <Route path="/ro-water-purifier" element={<ROServicesPage onOpenQuoteModal={handleOpenQuoteModal} />} />
-          <Route path="/ro-services" element={<ROServicesPage onOpenQuoteModal={handleOpenQuoteModal} />} />
-          
-          <Route path="/water-tank-cleaning" element={<WaterTankCleaningPage onOpenQuoteModal={handleOpenQuoteModal} />} />
-          <Route path="/tank-cleaning" element={<WaterTankCleaningPage onOpenQuoteModal={handleOpenQuoteModal} />} />
-          
-          <Route path="/pest-control" element={<PestControlPage onOpenQuoteModal={handleOpenQuoteModal} />} />
-          <Route path="/pest-control-services" element={<PestControlPage onOpenQuoteModal={handleOpenQuoteModal} />} />
-          
-          <Route path="/digital-marketing" element={<DigitalMarketingPage onOpenQuoteModal={handleOpenQuoteModal} />} />
-          <Route path="/marketing-services" element={<DigitalMarketingPage onOpenQuoteModal={handleOpenQuoteModal} />} />
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            {/* Canonical Core Vertical Pages */}
+            <Route path="/" element={<HomePage onOpenQuoteModal={openQuoteModal} />} />
+            <Route path="/realty-infrastructure" element={<RealtyPage onOpenQuoteModal={openQuoteModal} />} />
+            <Route path="/bentra-facility" element={<FacilityServicesPage onOpenQuoteModal={openQuoteModal} />} />
+            <Route path="/it-digital" element={<ITSolutionsPage onOpenQuoteModal={openQuoteModal} />} />
+            <Route path="/fmcg-beverages" element={<FreshFMCGPage onOpenQuoteModal={openQuoteModal} />} />
+            <Route path="/events-hospitality" element={<EventsHospitalityPage onOpenQuoteModal={openQuoteModal} />} />
+            <Route path="/events-hospitality/:slug" element={<EventsHospitalityPage onOpenQuoteModal={openQuoteModal} />} />
+            <Route path="/manpower-staffing" element={<ManpowerServicesPage onOpenQuoteModal={openQuoteModal} />} />
+            <Route path="/ventures" element={<VenturesPage onOpenQuoteModal={openQuoteModal} />} />
 
-          {/* Facility Overview & Additional Divisions */}
-          <Route path="/facility-services" element={<FacilityServicesPage onOpenQuoteModal={handleOpenQuoteModal} />} />
-          <Route path="/brentra-facility" element={<FacilityServicesPage onOpenQuoteModal={handleOpenQuoteModal} />} />
-          <Route path="/home-services" element={<FacilityServicesPage onOpenQuoteModal={handleOpenQuoteModal} />} />
-          <Route path="/urban-services" element={<FacilityServicesPage onOpenQuoteModal={handleOpenQuoteModal} />} />
-          <Route path="/fresh-fmcg" element={<FreshFMCGPage onOpenQuoteModal={handleOpenQuoteModal} />} />
-          <Route path="/events-hospitality" element={<EventsHospitalityPage onOpenQuoteModal={handleOpenQuoteModal} />} />
-          <Route path="/ventures" element={<VenturesPage onOpenQuoteModal={handleOpenQuoteModal} />} />
-          
-          {/* Corporate Governance & Hub Pages */}
-          <Route path="/corporate-overview" element={<CorporateOverviewPage onOpenQuoteModal={handleOpenQuoteModal} />} />
-          <Route path="/patna-hub" element={<PatnaHubPage onOpenQuoteModal={handleOpenQuoteModal} />} />
-          <Route path="/careers" element={<CareersPage onOpenQuoteModal={handleOpenQuoteModal} />} />
-          
-          <Route path="*" element={<HomePage onOpenQuoteModal={handleOpenQuoteModal} />} />
-        </Routes>
+            {/* Corporate Leadership, Hub & Careers */}
+            <Route path="/about" element={<CorporateOverviewPage onOpenQuoteModal={openQuoteModal} />} />
+            <Route path="/contact" element={<PatnaHubPage onOpenQuoteModal={openQuoteModal} />} />
+            <Route path="/patna-hub" element={<PatnaHubPage onOpenQuoteModal={openQuoteModal} />} />
+            <Route path="/careers-partners" element={<CareersPage onOpenQuoteModal={openQuoteModal} />} />
+            <Route path="/admin" element={<AdminPage />} />
+
+            {/* Sub-vertical dedicated deep dives */}
+            <Route path="/services/ro-water-purifier" element={<ROServicesPage onOpenQuoteModal={openQuoteModal} />} />
+            <Route path="/services/water-tank-cleaning" element={<WaterTankCleaningPage onOpenQuoteModal={openQuoteModal} />} />
+            <Route path="/services/pest-control" element={<PestControlPage onOpenQuoteModal={openQuoteModal} />} />
+            <Route path="/services/digital-marketing" element={<DigitalMarketingPage onOpenQuoteModal={openQuoteModal} />} />
+
+            {/* Legacy 301/Client Route Aliases */}
+            {Object.entries(ROUTE_ALIASES).map(([alias, target]) => (
+              <Route key={alias} path={alias} element={<Navigate to={target} replace />} />
+            ))}
+
+            {/* Fallback 404 */}
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </Suspense>
       </main>
 
       {/* Global Enterprise Footer */}
-      <Footer onOpenQuoteModal={handleOpenQuoteModal} />
+      <Footer onOpenQuoteModal={openQuoteModal} />
 
-      {/* Persistent Floating Conversion Widget */}
-      <FloatingWidget onOpenQuoteModal={handleOpenQuoteModal} />
+      {/* Persistent Floating Conversion Widget (Desktop/Tablet) */}
+      <FloatingWidget onOpenQuoteModal={openQuoteModal} />
+
+      {/* Mobile Sticky Bottom Action Bar */}
+      <MobileBottomBar onOpenQuoteModal={openQuoteModal} />
 
       {/* Universal Quote & Booking Modal */}
       <QuoteModal
-        isOpen={quoteModalOpen}
-        onClose={() => setQuoteModalOpen(false)}
+        isOpen={isOpen}
+        onClose={closeQuoteModal}
         initialVertical={selectedVertical}
       />
     </div>
+  );
+};
+
+export const App: React.FC = () => {
+  return (
+    <QuoteProvider>
+      <AppContent />
+    </QuoteProvider>
   );
 };
 

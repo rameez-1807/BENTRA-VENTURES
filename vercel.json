@@ -1,4 +1,110 @@
 {
+  "version": 2,
+  "redirects": [
+    {
+      "source": "/construction-services",
+      "destination": "/realty-infrastructure",
+      "permanent": true
+    },
+    {
+      "source": "/realty",
+      "destination": "/realty-infrastructure",
+      "permanent": true
+    },
+    {
+      "source": "/facility-services",
+      "destination": "/bentra-facility",
+      "permanent": true
+    },
+    {
+      "source": "/home-facility-services",
+      "destination": "/bentra-facility",
+      "permanent": true
+    },
+    {
+      "source": "/home-services",
+      "destination": "/bentra-facility",
+      "permanent": true
+    },
+    {
+      "source": "/facility",
+      "destination": "/bentra-facility",
+      "permanent": true
+    },
+    {
+      "source": "/services",
+      "destination": "/bentra-facility",
+      "permanent": true
+    },
+    {
+      "source": "/it-solutions",
+      "destination": "/it-digital",
+      "permanent": true
+    },
+    {
+      "source": "/it-services",
+      "destination": "/it-digital",
+      "permanent": true
+    },
+    {
+      "source": "/digital-marketing",
+      "destination": "/it-digital",
+      "permanent": true
+    },
+    {
+      "source": "/events",
+      "destination": "/events-hospitality",
+      "permanent": true
+    },
+    {
+      "source": "/hospitality",
+      "destination": "/events-hospitality",
+      "permanent": true
+    },
+    {
+      "source": "/fresh-fmcg",
+      "destination": "/fmcg-beverages",
+      "permanent": true
+    },
+    {
+      "source": "/manpower-housekeeping",
+      "destination": "/manpower-staffing",
+      "permanent": true
+    },
+    {
+      "source": "/corporate-overview",
+      "destination": "/about",
+      "permanent": true
+    },
+    {
+      "source": "/careers",
+      "destination": "/careers-partners",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        }
+      ]
+    }
+  ],
   "rewrites": [
     {
       "source": "/(.*)",
