@@ -19,7 +19,7 @@
 
 ### 🌐 **Live Production Frontend:** [https://bentra-ventures.vercel.app](https://bentra-ventures.vercel.app)
 ### ⚡ **Live Production Backend:** [https://bentra-ventures.onrender.com](https://bentra-ventures.onrender.com/api/health)
-### 🗄️ **Supabase Database Project:** `xcckrdfkkqreggehypuh` (PostgreSQL 17)
+### 🗄️ **Supabase Database Project:** `cqejrdwdddelpdlizbih` (PostgreSQL 17 — Tokyo Cluster)
 
 <br/>
 

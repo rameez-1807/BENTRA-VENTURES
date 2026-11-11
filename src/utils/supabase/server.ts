@@ -15,3 +15,4 @@ export const createServerSupabaseClient = () => {
 };
 
 export const serverSupabase = createServerSupabaseClient();
+
