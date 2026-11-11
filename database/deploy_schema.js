@@ -41,7 +41,8 @@ async function runMigrations() {
     const migrationFiles = [
       '01_drop_insecure_policies.sql',
       '02_target_schema.sql',
-      '03_seed_reference_data.sql'
+      '03_seed_reference_data.sql',
+      '04_safe_public_policies.sql'
     ];
 
     for (const file of migrationFiles) {
