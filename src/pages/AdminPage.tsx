@@ -75,7 +75,10 @@ export const AdminPage: React.FC = () => {
   const [otpVerifyError, setOtpVerifyError] = useState<string | null>(null);
   const [otpVerifySuccess, setOtpVerifySuccess] = useState<string | null>(null);
 
-  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+  const apiUrl = import.meta.env.VITE_API_URL || 
+    (typeof window !== 'undefined' && window.location.hostname === 'localhost' 
+      ? 'http://localhost:5000' 
+      : 'https://bentra-ventures.onrender.com');
 
   const fetchAdminData = async (key: string) => {
     setIsLoading(true);

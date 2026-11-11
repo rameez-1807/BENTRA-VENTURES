@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { supabase } from '../../lib/supabase';
 import { 
   X, 
   Calendar, 
@@ -130,7 +131,10 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
       customerNotes: customerNotes.trim() || undefined
     };
 
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    const apiUrl = import.meta.env.VITE_API_URL || 
+      (typeof window !== 'undefined' && window.location.hostname === 'localhost' 
+        ? 'http://localhost:5000' 
+        : 'https://bentra-ventures.onrender.com');
 
     try {
       const response = await fetch(`${apiUrl}/api/bookings`, {
@@ -139,12 +143,72 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
         body: JSON.stringify(payload)
       });
 
-      const data = await response.json();
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.bookingId) {
+          const confirmedOrder: BookingOrder = {
+            id: data.bookingId,
+            createdAt: new Date().toISOString(),
+            customer: {
+              ...address,
+              phone: `+91 ${cleanPhone}`
+            },
+            items: cartItems.map(item => ({
+              serviceId: item.service.id,
+              serviceName: item.service.name,
+              price: item.service.price,
+              quantity: item.quantity,
+              addons: item.selectedAddons || []
+            })),
+            slotDate: selectedDate,
+            slotTime: selectedTime,
+            paymentMethod: 'cash_after_service',
+            paymentStatus: 'pending',
+            subtotal: Number(data.subtotal || itemsSubtotal),
+            serviceFee: Number(data.serviceFee || serviceFee),
+            discount: Number(data.discount || discountAmount),
+            promoCode: appliedPromo,
+            totalAmount: Number(data.totalAmount || estimatedTotal),
+            status: 'confirmed',
+            customerNotes,
+            otpCode: data.otp || Math.floor(1000 + Math.random() * 9000).toString()
+          };
 
-      if (response.ok && data.success && data.bookingId) {
-        // Construct real confirmed booking order
+          onBookingSuccess(confirmedOrder);
+          onClose();
+          return;
+        }
+      }
+    } catch (err: any) {
+      console.warn('Backend API unreachable, saving booking directly to Supabase:', err);
+    }
+
+    // Direct Supabase Fallback ensuring zero lost bookings in production
+    try {
+      const fallbackBookingId = `BF-PAT-${Math.floor(10000 + Math.random() * 90000)}`;
+      const fallbackOtp = Math.floor(1000 + Math.random() * 9000).toString();
+
+      const { data, error } = await supabase.from('facility_bookings').insert({
+        id: fallbackBookingId,
+        customer_name: address.fullName,
+        phone: `+91 ${cleanPhone}`,
+        alternate_phone: address.alternatePhone || null,
+        locality: address.locality,
+        flat_house_no: address.flatHouseNo,
+        landmark: address.landmark || null,
+        city: address.city || 'Patna',
+        pincode: address.pincode.trim(),
+        total_amount: estimatedTotal,
+        payment_method: 'cash_after_service',
+        payment_status: 'pending',
+        status: 'confirmed',
+        otp_code: fallbackOtp,
+        customer_notes: customerNotes.trim() || null
+      }).select();
+
+      if (!error && data && data.length > 0) {
         const confirmedOrder: BookingOrder = {
-          id: data.bookingId,
+          id: fallbackBookingId,
           createdAt: new Date().toISOString(),
           customer: {
             ...address,
@@ -161,24 +225,23 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
           slotTime: selectedTime,
           paymentMethod: 'cash_after_service',
           paymentStatus: 'pending',
-          subtotal: Number(data.subtotal || itemsSubtotal),
-          serviceFee: Number(data.serviceFee || serviceFee),
-          discount: Number(data.discount || discountAmount),
+          subtotal: itemsSubtotal,
+          serviceFee: serviceFee,
+          discount: discountAmount,
           promoCode: appliedPromo,
-          totalAmount: Number(data.totalAmount || estimatedTotal),
+          totalAmount: estimatedTotal,
           status: 'confirmed',
           customerNotes,
-          otpCode: data.otp // Doorstep verification OTP returned once from server
+          otpCode: fallbackOtp
         };
 
         onBookingSuccess(confirmedOrder);
         onClose();
       } else {
-        setErrorMessage(data.error || 'Our booking system is temporarily unreachable. Please call Patna dispatch directly.');
+        setErrorMessage('Unable to confirm booking. Please call Patna dispatch at +91 90652 96294.');
       }
-    } catch (err: any) {
-      console.error('Error creating booking:', err);
-      setErrorMessage('Network connection lost while confirming booking. Please check your connection or call +91 90652 96294.');
+    } catch {
+      setErrorMessage('Network connection lost while confirming booking. Please call +91 90652 96294.');
     } finally {
       setIsSubmitting(false);
     }

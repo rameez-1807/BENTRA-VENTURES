@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { supabase } from '../lib/supabase';
 import { 
   X, 
   CheckCircle2, 
@@ -57,7 +58,11 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
 
     setIsSubmitting(true);
 
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    const apiUrl = import.meta.env.VITE_API_URL || 
+      (typeof window !== 'undefined' && window.location.hostname === 'localhost' 
+        ? 'http://localhost:5000' 
+        : 'https://bentra-ventures.onrender.com');
+
     try {
       const res = await fetch(`${apiUrl}/api/leads`, {
         method: 'POST',
@@ -74,18 +79,40 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
         })
       });
 
-      const data = await res.json();
-
-      if (res.ok && data.success && data.leadId) {
-        setLeadRef(data.leadId);
-        setIsSuccess(true);
-      } else {
-        // True server error response (No fake success)
-        setErrorMessage(data.error || 'Unable to submit your inquiry right now. Please call our Patna helpline directly.');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && data.leadId) {
+          setLeadRef(data.leadId);
+          setIsSuccess(true);
+          return;
+        }
       }
     } catch (err: any) {
-      console.error('Network error during lead submission:', err);
-      setErrorMessage('Network connection to Patna operations server interrupted. Please call or WhatsApp our executive desk.');
+      console.warn('Backend API unreachable, saving lead directly to Supabase:', err);
+    }
+
+    // Direct Supabase Fallback ensuring zero lost leads in production
+    try {
+      const fallbackId = 'BV-' + Math.floor(100000 + Math.random() * 900000);
+      const { data, error } = await supabase.from('leads').insert({
+        id: fallbackId,
+        full_name: fullName,
+        phone: phoneClean,
+        email: email || null,
+        vertical: selectedVertical,
+        type: 'quote',
+        location_name: locationName,
+        details: details || null
+      }).select();
+
+      if (!error && data && data.length > 0) {
+        setLeadRef(data[0].id || fallbackId);
+        setIsSuccess(true);
+      } else {
+        setErrorMessage('Unable to submit inquiry. Please call +91 90652 96294 or WhatsApp our Patna desk.');
+      }
+    } catch {
+      setErrorMessage('Network error. Please call +91 90652 96294 or WhatsApp our Patna desk.');
     } finally {
       setIsSubmitting(false);
     }
