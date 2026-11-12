@@ -104,3 +104,4 @@ export const BusinessApproachSection: React.FC = () => {
 };
 
 export default BusinessApproachSection;
+

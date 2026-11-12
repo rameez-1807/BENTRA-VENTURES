@@ -82,7 +82,7 @@ export const CorporateEnquirySection: React.FC = () => {
           phone: cleanPhone,
           email: formData.email.trim(),
           vertical: formData.vertical,
-          type: 'enquiry',
+          type: 'contact',
           locationName: 'Patna Corporate Desk',
           details: formData.message.trim(),
         }),
@@ -106,7 +106,7 @@ export const CorporateEnquirySection: React.FC = () => {
           phone: cleanPhone,
           email: formData.email.trim() || null,
           vertical: formData.vertical,
-          type: 'enquiry',
+          type: 'contact',
           location_name: 'Patna Corporate Desk',
           details: formData.message.trim(),
         }).select();
@@ -432,3 +432,4 @@ export const CorporateEnquirySection: React.FC = () => {
 };
 
 export default CorporateEnquirySection;
+

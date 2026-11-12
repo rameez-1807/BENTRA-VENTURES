@@ -68,3 +68,4 @@ export const BusinessStats: React.FC = () => {
 };
 
 export default BusinessStats;
+

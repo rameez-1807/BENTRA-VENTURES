@@ -121,3 +121,4 @@ export const AboutCompanySection: React.FC = () => {
 };
 
 export default AboutCompanySection;
+
