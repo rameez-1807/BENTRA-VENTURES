@@ -13,7 +13,8 @@ import {
   ShoppingBag, 
   ArrowRight,
   ShieldCheck,
-  MapPin
+  MapPin,
+  Compass
 } from 'lucide-react';
 import { SITE_CONFIG } from '../../config/site';
 
@@ -24,16 +25,13 @@ interface MobileMenuProps {
 }
 
 export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, onOpenQuoteModal }) => {
-  const [openCluster, setOpenCluster] = useState<string | null>('home');
+  const [openCompany, setOpenCompany] = useState(false);
+  const [openVerticals, setOpenVerticals] = useState(false);
 
   if (!isOpen) return null;
 
-  const toggleCluster = (id: string) => {
-    setOpenCluster(openCluster === id ? null : id);
-  };
-
   return (
-    <div className="fixed inset-0 z-50 lg:hidden flex flex-col bg-slate-900/60 backdrop-blur-sm animate-fade-in">
+    <div className="fixed inset-0 z-50 lg:hidden flex flex-col bg-slate-950/70 backdrop-blur-sm animate-fade-in">
       <div className="w-full max-w-sm sm:max-w-md h-full bg-white ml-auto flex flex-col shadow-2xl overflow-y-auto">
         
         {/* Mobile Header */}
@@ -41,8 +39,8 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, onOpenQ
           <Link to="/" onClick={onClose} className="flex items-center gap-2.5">
             <img src="/b-logo.png" alt="Brentra Logo" className="h-9 w-auto" />
             <div className="flex flex-col">
-              <span className="font-extrabold text-base tracking-tight text-slate-900 font-['Outfit']">
-                BRENTRA <span className="text-amber-600">VENTURES</span>
+              <span className="font-extrabold text-base tracking-tight text-[#0E2442] font-['Outfit']">
+                BRENTRA <span className="text-[#0E2442]">VENTURES</span>
               </span>
               <span className="text-[9px] font-bold tracking-widest text-slate-500 uppercase">
                 Private Limited
@@ -52,7 +50,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, onOpenQ
 
           <button
             onClick={onClose}
-            className="w-9 h-9 rounded-lg bg-slate-100 text-slate-600 hover:text-slate-900 flex items-center justify-center"
+            className="w-9 h-9 rounded-lg bg-slate-100 text-slate-600 hover:text-slate-900 flex items-center justify-center cursor-pointer"
             aria-label="Close navigation"
           >
             <X className="w-5 h-5" />
@@ -60,206 +58,195 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, onOpenQ
         </div>
 
         {/* Primary Links */}
-        <div className="p-4 space-y-1">
+        <div className="p-4 space-y-1.5 border-b border-slate-100">
+          {/* Home */}
+          <Link
+            to="/"
+            onClick={onClose}
+            className="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold text-slate-800 hover:bg-slate-50 text-sm"
+          >
+            <span>Home</span>
+            <ArrowRight className="w-4 h-4 text-slate-400" />
+          </Link>
+
+          {/* About Us */}
           <Link
             to="/about"
             onClick={onClose}
-            className="flex items-center justify-between px-3 py-2.5 rounded-xl font-semibold text-slate-800 hover:bg-slate-50 text-sm"
+            className="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold text-slate-800 hover:bg-slate-50 text-sm"
           >
-            About & Leadership
+            <span>About Us</span>
             <ArrowRight className="w-4 h-4 text-slate-400" />
           </Link>
+
+          {/* Director Message */}
+          <Link
+            to="/about#director"
+            onClick={onClose}
+            className="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold text-slate-800 hover:bg-slate-50 text-sm"
+          >
+            <span>Director Message</span>
+            <ArrowRight className="w-4 h-4 text-slate-400" />
+          </Link>
+
+          {/* Brentra Facility with URBAN badge */}
+          <Link
+            to="/bentra-facility"
+            onClick={onClose}
+            className="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold text-slate-800 hover:bg-cyan-50/70 text-sm"
+          >
+            <div className="flex items-center gap-2">
+              <span>Brentra Facility</span>
+              <span className="px-1.5 py-0.5 text-[10px] font-extrabold uppercase bg-[#00A3C4] text-white rounded">
+                URBAN
+              </span>
+            </div>
+            <ArrowRight className="w-4 h-4 text-[#00A3C4]" />
+          </Link>
+
+          {/* Company Accordion */}
+          <div className="rounded-xl border border-slate-200/80 overflow-hidden">
+            <button
+              onClick={() => setOpenCompany(!openCompany)}
+              className="w-full flex items-center justify-between px-3.5 py-2.5 bg-slate-50/80 text-left font-semibold text-sm text-slate-800"
+            >
+              <span>Company</span>
+              <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform ${openCompany ? 'rotate-180' : ''}`} />
+            </button>
+            {openCompany && (
+              <div className="p-3 bg-white space-y-1.5 border-t border-slate-100 text-xs">
+                <Link
+                  to="/about"
+                  onClick={onClose}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-50 text-slate-700 font-medium"
+                >
+                  <Building2 className="w-3.5 h-3.5 text-amber-600" />
+                  <span>Leadership & Vision</span>
+                </Link>
+                <Link
+                  to="/about#director"
+                  onClick={onClose}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-50 text-slate-700 font-medium"
+                >
+                  <Compass className="w-3.5 h-3.5 text-blue-600" />
+                  <span>Director's Message</span>
+                </Link>
+                <Link
+                  to="/contact"
+                  onClick={onClose}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-50 text-slate-700 font-medium"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Patna Central Hub</span>
+                </Link>
+                <Link
+                  to="/admin"
+                  onClick={onClose}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-50 text-slate-500 font-medium"
+                >
+                  <span>Operations Console</span>
+                </Link>
+              </div>
+            )}
+          </div>
+
+          {/* Careers */}
           <Link
             to="/careers-partners"
             onClick={onClose}
-            className="flex items-center justify-between px-3 py-2.5 rounded-xl font-semibold text-slate-800 hover:bg-slate-50 text-sm"
+            className="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold text-slate-800 hover:bg-slate-50 text-sm"
           >
-            Careers & Partners
+            <span>Careers</span>
             <ArrowRight className="w-4 h-4 text-slate-400" />
           </Link>
+
+          {/* Contact Us */}
           <Link
             to="/contact"
             onClick={onClose}
-            className="flex items-center justify-between px-3 py-2.5 rounded-xl font-semibold text-slate-800 hover:bg-slate-50 text-sm"
+            className="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold text-slate-800 hover:bg-slate-50 text-sm"
           >
-            Patna HQ & Contact
+            <span>Contact Us</span>
             <ArrowRight className="w-4 h-4 text-slate-400" />
           </Link>
         </div>
 
-        {/* Accordion Clusters */}
-        <div className="px-4 pb-4 space-y-2 flex-grow">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 px-3 block">
-            Ecosystem Divisions
-          </span>
+        {/* Verticals Explorer Accordion */}
+        <div className="p-4 space-y-2 flex-grow">
+          <button
+            onClick={() => setOpenVerticals(!openVerticals)}
+            className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-slate-50 text-left font-bold text-xs uppercase tracking-wider text-slate-600 border border-slate-200"
+          >
+            <span>Explore All 8 Verticals</span>
+            <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform ${openVerticals ? 'rotate-180' : ''}`} />
+          </button>
 
-          {/* Cluster 1: Home & Facility */}
-          <div className="border border-slate-100 rounded-xl overflow-hidden">
-            <button
-              onClick={() => toggleCluster('home')}
-              className="w-full flex items-center justify-between p-3.5 bg-slate-50/70 hover:bg-slate-50 text-left font-semibold text-sm text-slate-900"
-            >
-              <span className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-amber-500" />
-                Home & Facility Care
-              </span>
-              <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform ${openCluster === 'home' ? 'rotate-180' : ''}`} />
-            </button>
-            {openCluster === 'home' && (
-              <div className="p-3 bg-white space-y-2 border-t border-slate-100 text-xs">
-                <Link
-                  to="/bentra-facility"
-                  onClick={onClose}
-                  className="block p-2 rounded-lg hover:bg-slate-50 font-medium text-slate-700 hover:text-amber-600"
-                >
-                  Brentra Facility Services (AC, Tank, Salon)
-                </Link>
-                <Link
-                  to="/manpower-staffing"
-                  onClick={onClose}
-                  className="block p-2 rounded-lg hover:bg-slate-50 font-medium text-slate-700 hover:text-blue-600"
-                >
-                  Security Guards & Manpower
-                </Link>
-              </div>
-            )}
-          </div>
-
-          {/* Cluster 2: Build & Realty */}
-          <div className="border border-slate-100 rounded-xl overflow-hidden">
-            <button
-              onClick={() => toggleCluster('realty')}
-              className="w-full flex items-center justify-between p-3.5 bg-slate-50/70 hover:bg-slate-50 text-left font-semibold text-sm text-slate-900"
-            >
-              <span className="flex items-center gap-2">
-                <Building2 className="w-4 h-4 text-blue-600" />
-                Build & Realty
-              </span>
-              <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform ${openCluster === 'realty' ? 'rotate-180' : ''}`} />
-            </button>
-            {openCluster === 'realty' && (
-              <div className="p-3 bg-white space-y-2 border-t border-slate-100 text-xs">
-                <Link
-                  to="/realty-infrastructure"
-                  onClick={onClose}
-                  className="block p-2 rounded-lg hover:bg-slate-50 font-medium text-slate-700 hover:text-amber-700"
-                >
-                  Turnkey Construction (₹1,900/sq.ft)
-                </Link>
-                <Link
-                  to="/realty-infrastructure#solar"
-                  onClick={onClose}
-                  className="block p-2 rounded-lg hover:bg-slate-50 font-medium text-slate-700 hover:text-amber-700"
-                >
-                  Solar & Clean Tech
-                </Link>
-              </div>
-            )}
-          </div>
-
-          {/* Cluster 3: Technology */}
-          <div className="border border-slate-100 rounded-xl overflow-hidden">
-            <button
-              onClick={() => toggleCluster('tech')}
-              className="w-full flex items-center justify-between p-3.5 bg-slate-50/70 hover:bg-slate-50 text-left font-semibold text-sm text-slate-900"
-            >
-              <span className="flex items-center gap-2">
-                <Cpu className="w-4 h-4 text-cyan-600" />
-                Technology & Systems
-              </span>
-              <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform ${openCluster === 'tech' ? 'rotate-180' : ''}`} />
-            </button>
-            {openCluster === 'tech' && (
-              <div className="p-3 bg-white space-y-2 border-t border-slate-100 text-xs">
-                <Link
-                  to="/it-digital"
-                  onClick={onClose}
-                  className="block p-2 rounded-lg hover:bg-slate-50 font-medium text-slate-700 hover:text-cyan-600"
-                >
-                  Enterprise IT, Cloud & ERP
-                </Link>
-                <Link
-                  to="/ventures"
-                  onClick={onClose}
-                  className="block p-2 rounded-lg hover:bg-slate-50 font-medium text-slate-700 hover:text-purple-600"
-                >
-                  Ventures & Incubation
-                </Link>
-              </div>
-            )}
-          </div>
-
-          {/* Cluster 4: Trade & Hospitality */}
-          <div className="border border-slate-100 rounded-xl overflow-hidden">
-            <button
-              onClick={() => toggleCluster('trade')}
-              className="w-full flex items-center justify-between p-3.5 bg-slate-50/70 hover:bg-slate-50 text-left font-semibold text-sm text-slate-900"
-            >
-              <span className="flex items-center gap-2">
-                <PartyPopper className="w-4 h-4 text-rose-600" />
-                Trade & Hospitality
-              </span>
-              <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform ${openCluster === 'trade' ? 'rotate-180' : ''}`} />
-            </button>
-            {openCluster === 'trade' && (
-              <div className="p-3 bg-white space-y-2 border-t border-slate-100 text-xs">
-                <Link
-                  to="/events-hospitality"
-                  onClick={onClose}
-                  className="block p-2 rounded-lg hover:bg-slate-50 font-medium text-slate-700 hover:text-pink-600"
-                >
-                  Events & Luxury Hospitality
-                </Link>
-                <Link
-                  to="/fmcg-beverages"
-                  onClick={onClose}
-                  className="block p-2 rounded-lg hover:bg-slate-50 font-medium text-slate-700 hover:text-emerald-600"
-                >
-                  Fresh FMCG & Beverages
-                </Link>
-              </div>
-            )}
-          </div>
+          {openVerticals && (
+            <div className="grid grid-cols-1 gap-1 pt-1 text-xs">
+              <Link to="/it-digital" onClick={onClose} className="p-2 rounded-lg hover:bg-slate-100 text-slate-700 font-medium">
+                • IT & Digital Solutions
+              </Link>
+              <Link to="/realty-infrastructure" onClick={onClose} className="p-2 rounded-lg hover:bg-slate-100 text-slate-700 font-medium">
+                • Realty, Construction & Turnkey Interiors
+              </Link>
+              <Link to="/events-hospitality" onClick={onClose} className="p-2 rounded-lg hover:bg-slate-100 text-slate-700 font-medium">
+                • Events & Entertainment (Hospitality)
+              </Link>
+              <Link to="/ventures" onClick={onClose} className="p-2 rounded-lg hover:bg-slate-100 text-slate-700 font-medium">
+                • Healthcare & Pharma
+              </Link>
+              <Link to="/realty-infrastructure#materials" onClick={onClose} className="p-2 rounded-lg hover:bg-slate-100 text-slate-700 font-medium">
+                • General Sourcing & Building Materials
+              </Link>
+              <Link to="/manpower-staffing" onClick={onClose} className="p-2 rounded-lg hover:bg-slate-100 text-slate-700 font-medium">
+                • Manpower & Workforce Solutions
+              </Link>
+              <Link to="/bentra-facility" onClick={onClose} className="p-2 rounded-lg hover:bg-slate-100 text-slate-700 font-medium">
+                • Facility Maintenance (RO, AC, AMC)
+              </Link>
+              <Link to="/fmcg-beverages" onClick={onClose} className="p-2 rounded-lg hover:bg-slate-100 text-slate-700 font-medium">
+                • Fresh Food & FMCG Supply
+              </Link>
+            </div>
+          )}
         </div>
 
-        {/* Direct Action Drawer Footer */}
-        <div className="p-4 bg-slate-50 border-t border-slate-200 space-y-3">
+        {/* Mobile Footer CTAs */}
+        <div className="p-4 bg-slate-50 border-t border-slate-200 space-y-3 sticky bottom-0">
           <button
             onClick={() => {
               onClose();
               onOpenQuoteModal('bentra-facility');
             }}
-            className="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm shadow-md transition-colors"
+            className="w-full py-3 rounded-xl bg-[#00A3C4] hover:bg-[#008CA8] active:scale-98 text-white font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
-            Book a Service / Get Quote
+            <span>Book a Service</span>
+            <ArrowRight className="w-4 h-4" />
           </button>
 
-          <div className="grid grid-cols-2 gap-2 text-xs font-semibold">
+          <div className="grid grid-cols-2 gap-2 text-xs">
             <a
               href={SITE_CONFIG.contacts.phoneTel}
-              className="flex items-center justify-center gap-1.5 py-2.5 rounded-lg bg-white border border-slate-200 text-slate-800 hover:border-slate-300"
+              className="py-2.5 px-3 rounded-xl bg-white border border-slate-200 text-slate-800 font-semibold flex items-center justify-center gap-1.5 shadow-xs"
             >
-              <Phone className="w-3.5 h-3.5 text-blue-600" /> Call Desk
+              <Phone className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Call Us</span>
             </a>
             <a
               href={SITE_CONFIG.contacts.whatsappLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-1.5 py-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800"
+              className="py-2.5 px-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 font-semibold flex items-center justify-center gap-1.5 shadow-xs"
             >
-              <MessageSquare className="w-3.5 h-3.5 text-emerald-600" /> WhatsApp
+              <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
+              <span>WhatsApp</span>
             </a>
           </div>
-
-          <div className="pt-2 text-[11px] text-slate-500 flex items-center justify-center gap-1">
-            <MapPin className="w-3 h-3 text-slate-400" />
-            Patna HQ: {SITE_CONFIG.headquarters.address}
-          </div>
         </div>
+
       </div>
     </div>
   );
 };
 
 export default MobileMenu;
-
