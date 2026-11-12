@@ -6,12 +6,10 @@ import {
   ChevronDown, 
   Menu, 
   ShieldCheck, 
-  Sparkles,
-  Building2,
-  Compass,
-  ArrowRight
+  Sparkles
 } from 'lucide-react';
 import { SITE_CONFIG } from '../config/site';
+import { MegaMenu } from './nav/MegaMenu';
 import { MobileMenu } from './nav/MobileMenu';
 
 interface HeaderProps {
@@ -20,9 +18,9 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ onOpenQuoteModal }) => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [companyDropdownOpen, setCompanyDropdownOpen] = useState(false);
+  const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const companyTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const servicesTimerRef = useRef<NodeJS.Timeout | null>(null);
   const location = useLocation();
 
   useEffect(() => {
@@ -35,50 +33,60 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQuoteModal }) => {
 
   // Close menus on route navigation
   useEffect(() => {
-    setCompanyDropdownOpen(false);
+    setServicesDropdownOpen(false);
     setMobileMenuOpen(false);
   }, [location.pathname]);
 
-  const handleCompanyMouseEnter = () => {
-    if (companyTimerRef.current) clearTimeout(companyTimerRef.current);
-    companyTimerRef.current = setTimeout(() => {
-      setCompanyDropdownOpen(true);
+  const handleServicesMouseEnter = () => {
+    if (servicesTimerRef.current) clearTimeout(servicesTimerRef.current);
+    servicesTimerRef.current = setTimeout(() => {
+      setServicesDropdownOpen(true);
     }, 100);
   };
 
-  const handleCompanyMouseLeave = () => {
-    if (companyTimerRef.current) clearTimeout(companyTimerRef.current);
-    companyTimerRef.current = setTimeout(() => {
-      setCompanyDropdownOpen(false);
+  const handleServicesMouseLeave = () => {
+    if (servicesTimerRef.current) clearTimeout(servicesTimerRef.current);
+    servicesTimerRef.current = setTimeout(() => {
+      setServicesDropdownOpen(false);
     }, 150);
   };
 
-  const isHome = location.pathname === '/';
-
   return (
     <>
-      {/* 1. Slim Dark Navy Top Announcement Bar */}
+      {/* 1. Top Corporate Information Bar */}
       <div 
-        className="bg-[#0B1B2B] text-slate-200 text-xs border-b border-[#162C42] py-2 hidden md:block"
+        className="bg-[#071426] text-slate-200 text-xs border-b border-[#162C42] py-2 hidden md:block"
         role="complementary"
         aria-label="Patna Operational Hub and Corporate Helpline"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center text-[11px] font-medium tracking-wide">
-          {/* Left Announcement */}
-          <div className="flex items-center gap-3">
-            <span className="text-slate-300">
-              Patna Central Hub | Office Hours: 9:00 AM – 8:00 PM | Corporate Contact
+          
+          {/* LEFT: Green Live Status Dot & Operations Hours */}
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+            <span className="text-emerald-400 font-semibold">
+              Patna Operations Live: 7:00 AM – 9:00 PM IST (All 7 Days)
             </span>
           </div>
 
-          {/* Right Direct Links */}
+          {/* CENTER: Headquarters Address */}
+          <div className="hidden xl:flex items-center text-slate-300">
+            <span>HQ: Preven Vila, Flat 34, New Khajoorbana, Patna – 800006</span>
+          </div>
+
+          {/* RIGHT: Construction Baseline, Phone & WhatsApp */}
           <div className="flex items-center gap-4">
+            <span className="text-amber-400 font-medium flex items-center gap-1">
+              <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+              Construction Baseline Locked at ₹1,900 / sq. ft.
+            </span>
+            <span className="text-slate-600">|</span>
             <a 
               href={SITE_CONFIG.contacts.phoneTel}
-              className="flex items-center gap-1.5 text-slate-200 hover:text-white transition-colors font-semibold"
+              className="flex items-center gap-1.5 text-slate-100 hover:text-white transition-colors font-semibold"
             >
-              <Phone className="w-3.5 h-3.5 text-amber-400" />
-              <span>{SITE_CONFIG.contacts.phoneFormatted}</span>
+              <Phone className="w-3.5 h-3.5 text-slate-300" />
+              <span>+91 90652 96294</span>
             </a>
             <span className="text-slate-600">|</span>
             <a 
@@ -88,13 +96,10 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQuoteModal }) => {
               className="flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 transition-colors font-semibold"
             >
               <MessageSquare className="w-3.5 h-3.5" />
-              <span>WhatsApp Desk</span>
+              <span>WhatsApp Helpdesk</span>
             </a>
-            <span className="text-slate-600 hidden lg:inline">|</span>
-            <span className="text-slate-400 hidden lg:inline">
-              CIN Registered &bull; Patna HQ
-            </span>
           </div>
+
         </div>
       </div>
 
@@ -106,7 +111,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQuoteModal }) => {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           
-          {/* LEFT: Company Logo & Name */}
+          {/* LEFT: Company Logo & Branding */}
           <Link to="/" className="flex items-center gap-3 group shrink-0">
             <img 
               src="/b-logo.png" 
@@ -114,8 +119,8 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQuoteModal }) => {
               className="h-10 sm:h-11 w-auto object-contain transition-transform group-hover:scale-105"
             />
             <div className="flex flex-col">
-              <span className="font-extrabold text-lg sm:text-xl tracking-tight text-[#0E2442] leading-none font-['Outfit']">
-                BRENTRA <span className="text-[#0E2442]">VENTURES</span>
+              <span className="font-extrabold text-lg sm:text-xl tracking-tight text-slate-900 leading-none font-['Outfit']">
+                BRENTRA <span className="text-amber-600">VENTURES</span>
               </span>
               <span className="text-[9px] font-bold tracking-[0.22em] text-slate-500 uppercase mt-1">
                 PRIVATE LIMITED
@@ -123,175 +128,108 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQuoteModal }) => {
             </div>
           </Link>
 
-          {/* CENTER / RIGHT Navigation Links matching Reference */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+          {/* CENTER: Navigation Links matching Reference Screenshot */}
+          <nav className="hidden lg:flex items-center gap-7 xl:gap-8">
             
-            {/* 1. Home */}
-            <Link 
-              to="/" 
-              className={`px-3 py-2 text-sm font-semibold transition-colors relative ${
-                isHome ? 'text-slate-900 font-bold' : 'text-slate-700 hover:text-slate-900'
-              }`}
-            >
-              Home
-              {isHome && (
-                <span className="absolute bottom-0 left-3 right-3 h-[2px] bg-slate-900 rounded-full" />
-              )}
-            </Link>
-
-            {/* 2. About Us */}
-            <Link 
-              to="/about"
-              className={`px-3 py-2 text-sm font-semibold transition-colors rounded-lg ${
-                location.pathname === '/about' 
-                  ? 'text-slate-900 bg-slate-100 font-bold' 
-                  : 'text-slate-700 hover:text-slate-900 hover:bg-slate-50'
-              }`}
-            >
-              About Us
-            </Link>
-
-            {/* 3. Director Message */}
-            <Link 
-              to="/about#director"
-              className="px-3 py-2 text-sm font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-50 transition-colors rounded-lg"
-            >
-              Director Message
-            </Link>
-
-            {/* 4. Brentra Facility with URBAN pill badge */}
-            <Link 
-              to="/bentra-facility"
-              className={`flex items-center gap-1.5 px-3 py-2 text-sm font-semibold transition-colors rounded-lg ${
-                location.pathname.startsWith('/bentra-facility')
-                  ? 'text-[#00A3C4] bg-cyan-50/80 font-bold' 
-                  : 'text-slate-700 hover:text-slate-900 hover:bg-slate-50'
-              }`}
-            >
-              <span>Brentra Facility</span>
-              <span className="px-1.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wide bg-[#00A3C4] text-white rounded-md shadow-xs">
-                URBAN
-              </span>
-            </Link>
-
-            {/* 5. Company (Dropdown Menu) */}
+            {/* 1. Services with Dropdown */}
             <div 
               className="relative"
-              onMouseEnter={handleCompanyMouseEnter}
-              onMouseLeave={handleCompanyMouseLeave}
+              onMouseEnter={handleServicesMouseEnter}
+              onMouseLeave={handleServicesMouseLeave}
             >
               <button
                 type="button"
-                onClick={() => setCompanyDropdownOpen(!companyDropdownOpen)}
-                className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-semibold transition-colors cursor-pointer ${
-                  companyDropdownOpen
-                    ? 'text-slate-900 bg-slate-100' 
-                    : 'text-slate-700 hover:text-slate-900 hover:bg-slate-50'
+                onClick={() => setServicesDropdownOpen(!servicesDropdownOpen)}
+                className={`flex items-center gap-1.5 text-sm font-semibold transition-colors py-1 cursor-pointer ${
+                  servicesDropdownOpen 
+                    ? 'text-amber-600' 
+                    : 'text-slate-700 hover:text-slate-900'
                 }`}
-                aria-expanded={companyDropdownOpen}
+                aria-expanded={servicesDropdownOpen}
                 aria-haspopup="true"
               >
-                <span>Company</span>
-                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${companyDropdownOpen ? 'rotate-180 text-slate-900' : 'text-slate-400'}`} />
+                <span>Services</span>
+                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${servicesDropdownOpen ? 'rotate-180 text-amber-600' : 'text-slate-400'}`} />
               </button>
-
-              {/* Company Dropdown Card */}
-              {companyDropdownOpen && (
-                <div className="absolute top-full left-0 mt-1 w-64 bg-white border border-slate-200 rounded-2xl shadow-xl py-2 z-50">
-                  <div className="px-4 py-2 border-b border-slate-100">
-                    <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Corporate Group</p>
-                    <p className="text-xs font-semibold text-slate-800">Brentra Ventures Pvt Ltd</p>
-                  </div>
-
-                  <Link 
-                    to="/about"
-                    className="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-slate-700 hover:text-[#0E2442] hover:bg-slate-50 transition-colors"
-                  >
-                    <Building2 className="w-4 h-4 text-amber-600" />
-                    <div>
-                      <div>Leadership & Vision</div>
-                      <span className="text-[10px] text-slate-400 font-normal">Board of Directors & Ethos</span>
-                    </div>
-                  </Link>
-
-                  <Link 
-                    to="/about#director"
-                    className="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-slate-700 hover:text-[#0E2442] hover:bg-slate-50 transition-colors"
-                  >
-                    <Compass className="w-4 h-4 text-blue-600" />
-                    <div>
-                      <div>Director's Message</div>
-                      <span className="text-[10px] text-slate-400 font-normal">Strategic roadmap & commitments</span>
-                    </div>
-                  </Link>
-
-                  <Link 
-                    to="/contact"
-                    className="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-slate-700 hover:text-[#0E2442] hover:bg-slate-50 transition-colors"
-                  >
-                    <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                    <div>
-                      <div>Patna Central Hub</div>
-                      <span className="text-[10px] text-slate-400 font-normal">Headquarters & State Operations</span>
-                    </div>
-                  </Link>
-
-                  <div className="border-t border-slate-100 my-1" />
-
-                  <Link 
-                    to="/admin"
-                    className="flex items-center justify-between px-4 py-2 text-[11px] font-medium text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition-colors"
-                  >
-                    <span>Operations Console</span>
-                    <ArrowRight className="w-3 h-3 text-slate-400" />
-                  </Link>
-                </div>
-              )}
             </div>
 
-            {/* 6. Careers */}
+            {/* 2. About */}
             <Link 
-              to="/careers-partners"
-              className={`px-3 py-2 text-sm font-semibold transition-colors rounded-lg ${
-                location.pathname === '/careers-partners' 
-                  ? 'text-slate-900 bg-slate-100 font-bold' 
-                  : 'text-slate-700 hover:text-slate-900 hover:bg-slate-50'
+              to="/about"
+              className={`text-sm font-semibold transition-colors py-1 ${
+                location.pathname === '/about' 
+                  ? 'text-slate-900 font-bold' 
+                  : 'text-slate-700 hover:text-slate-900'
               }`}
             >
-              Careers
+              About
             </Link>
 
-            {/* 7. Contact Us */}
+            {/* 3. Careers & Partners */}
             <Link 
-              to="/contact"
-              className={`px-3 py-2 text-sm font-semibold transition-colors rounded-lg ${
-                location.pathname === '/contact'
-                  ? 'text-slate-900 bg-slate-100 font-bold' 
-                  : 'text-slate-700 hover:text-slate-900 hover:bg-slate-50'
+              to="/careers-partners"
+              className={`text-sm font-semibold transition-colors py-1 ${
+                location.pathname === '/careers-partners' 
+                  ? 'text-slate-900 font-bold' 
+                  : 'text-slate-700 hover:text-slate-900'
               }`}
             >
-              Contact Us
+              Careers & Partners
+            </Link>
+
+            {/* 4. Contact */}
+            <Link 
+              to="/contact"
+              className={`text-sm font-semibold transition-colors py-1 ${
+                location.pathname === '/contact'
+                  ? 'text-slate-900 font-bold' 
+                  : 'text-slate-700 hover:text-slate-900'
+              }`}
+            >
+              Contact
             </Link>
           </nav>
 
-          {/* RIGHT CTA: Book a Service */}
-          <div className="flex items-center gap-3">
+          {/* RIGHT: Phone & Book a Service CTA */}
+          <div className="flex items-center gap-3 sm:gap-4">
+            <a
+              href="tel:+919065296294"
+              className="hidden sm:flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-slate-700 hover:text-slate-900 transition-colors"
+            >
+              <Phone className="w-4 h-4 text-emerald-600" />
+              <span>+91 90652 96294</span>
+            </a>
+
             <button
               onClick={() => onOpenQuoteModal('bentra-facility')}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#00A3C4] hover:bg-[#008CA8] active:scale-95 text-white font-bold text-xs sm:text-sm shadow-sm transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-[#0A192F] hover:bg-[#1E3E62] active:scale-95 text-white font-bold text-xs sm:text-sm shadow-sm transition-all cursor-pointer group"
             >
+              <Sparkles className="w-4 h-4 text-amber-400 group-hover:rotate-12 transition-transform" />
               <span>Book a Service</span>
             </button>
 
             {/* Mobile Hamburger Trigger */}
             <button
               onClick={() => setMobileMenuOpen(true)}
-              className="lg:hidden p-2 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+              className="lg:hidden p-2 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors cursor-pointer"
               aria-label="Open navigation menu"
             >
               <Menu className="w-6 h-6" />
             </button>
           </div>
+
+        </div>
+
+        {/* Full-Width Services MegaMenu */}
+        <div 
+          onMouseEnter={handleServicesMouseEnter} 
+          onMouseLeave={handleServicesMouseLeave}
+        >
+          <MegaMenu 
+            isOpen={servicesDropdownOpen} 
+            onClose={() => setServicesDropdownOpen(false)} 
+            onOpenQuoteModal={onOpenQuoteModal} 
+          />
         </div>
       </header>
 
