@@ -8,11 +8,10 @@ import {
   Sparkles, 
   MapPin, 
   CheckCircle2, 
-  ChevronDown,
-  ShieldCheck
+  ChevronDown
 } from 'lucide-react';
 import { HeroCarousel } from '../components/HeroCarousel';
-import { ParentStats } from '../components/ParentStats';
+import { BusinessStats } from '../components/BusinessStats';
 import { EnterprisesGrid } from '../components/EnterprisesGrid';
 import { AboutCompanySection } from '../components/AboutCompanySection';
 import { WhyChooseUsSection } from '../components/WhyChooseUsSection';
@@ -48,13 +47,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenQuoteModal }) => {
   return (
     <div className="min-h-screen bg-white text-slate-800">
       
-      {/* 1. Main Featured Section: OUR DIVERSE VENTURES (3-Card Carousel matching Reference Screenshot) */}
+      {/* 1. Hero Section: Premium Image Slider matching Reference Screenshot */}
       <HeroCarousel onOpenQuoteModal={onOpenQuoteModal} />
 
-      {/* 2. Operational Footprint & Metrics Section directly below Carousel */}
-      <ParentStats />
+      {/* 2. Business Statistics Section: 4 Horizontally Aligned White Cards matching Reference Screenshot */}
+      <BusinessStats />
 
-      {/* 3. Our Enterprises & Services Section: 4x2 Grid of 8 Verticals */}
+      {/* 3. Our Enterprises & Services Section: 4x2 Grid of 8 Verticals matching Reference Screenshot */}
       <EnterprisesGrid />
 
       {/* 4. About Our Company: Vision, Mission & Corporate Profile */}
